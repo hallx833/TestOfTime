@@ -9,7 +9,9 @@ class Bot(commands.Bot):
         # initial_channels can also be a callable which returns a list of strings...
         with open('../auth.txt') as f:
             token = f.readline().rstrip()
-        super().__init__(token=token, prefix='!', initial_channels=['l0rdev'])
+        with open('../channel,.txt') as f:
+            channel = f.readline().rstrip()
+        super().__init__(token=token, prefix='!', initial_channels=[channel])
 
     async def event_ready(self):
         # Notify us when everything is ready!
