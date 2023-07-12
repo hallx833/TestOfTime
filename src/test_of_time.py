@@ -9,7 +9,7 @@ class Bot(commands.Bot):
         # initial_channels can also be a callable which returns a list of strings...
         with open('../auth.txt') as f:
             token = f.readline().rstrip()
-        with open('../channel,.txt') as f:
+        with open('../channel.txt') as f:
             channel = f.readline().rstrip()
         super().__init__(token=token, prefix='!', initial_channels=[channel])
 
