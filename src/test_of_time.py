@@ -1,5 +1,10 @@
 from twitchio.ext import commands
 
+from twitchAPI.twitch import Twitch
+from twitchAPI.oauth import UserAuthenticator
+from twitchAPI.types import AuthScope
+from twitchAPI.helper import first
+
 
 class Bot(commands.Bot):
 
@@ -7,26 +12,55 @@ class Bot(commands.Bot):
         # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
         # prefix can be a callable, which returns a list of strings or a string...
         # initial_channels can also be a callable which returns a list of strings...
-        with open('../auth.txt') as f:
-            token = f.readline().rstrip()
+        
+
+        
+        # with open('../auth.txt') as f:
+        #     token = f.readline().rstrip()
+        self.token = ''
+        self.refresh_token = ''
         with open('../channel.txt') as f:
             channel = f.readline().rstrip()
-        super().__init__(token=token, prefix='!', initial_channels=[channel])
+        self.channel = channel
+        super().__init__(token=self.token, prefix='!', initial_channels=[channel])
+
+    # async def auth(self, token, refresh_token):
+    #     twitch = await Twitch('8k1ait256yqr6e6l9rv5e5giigfyiw', 'c1yulaw84hfsy0baa65t49e65l19az')
+
+    #     target_scope = [AuthScope.BITS_READ]
+    #     auth = UserAuthenticator(twitch, target_scope, force_verify=False)
+    #     # add User authentication
+    #     await twitch.set_user_authentication(token, target_scope, refresh_token)
 
     async def event_ready(self):
+        
         # Notify us when everything is ready!
         # We are logged in and ready to chat and use commands...
         print(f'Logged in as | {self.nick}')
         print(f'User id is | {self.user_id}')
 
     @commands.command()
-    async def hello(self, ctx: commands.Context):
-        # Here we have a command hello, we can invoke our command with our prefix and command name
-        # e.g ?hello
-        # We can also give our commands aliases (different names) to invoke with.
+    async def tot(self, ctx: commands.Context):
+        twitch = await Twitch()
 
-        # Send a hello back!
-        # Sending a reply back to the channel is easy... Below is an example.
+        target_scope = [AuthScope.BITS_READ]
+        auth = UserAuthenticator(twitch, target_scope, force_verify=False)
+        # add User authentication
+        await twitch.set_user_authentication(self.token, target_scope, self.refresh_token)
+        # Get all of the chatters
+        streamer = await first(self.twitch.get_users(logins=self.channel))
+        streamer_id = streamer.id
+
+        chatters = self.twitch.get_chatters(streamer_id, streamer_id)
+
+        print(chatters)
+
+        # Pick a random chatter and get their follow date
+
+        # Create a prediction
+
+        # After some time resolve prediction
+
         await ctx.send(f'Hello {ctx.author.name}!')
 
 
