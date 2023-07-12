@@ -7,7 +7,9 @@ class Bot(commands.Bot):
         # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
         # prefix can be a callable, which returns a list of strings or a string...
         # initial_channels can also be a callable which returns a list of strings...
-        super().__init__(token='ACCESS_TOKEN', prefix='?', initial_channels=['...'])
+        with open('auth.txt') as f:
+            token = f.readline().rstrip()
+        super().__init__(token=token, prefix='!', initial_channels=['l0rdev'])
 
     async def event_ready(self):
         # Notify us when everything is ready!
