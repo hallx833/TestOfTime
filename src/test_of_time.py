@@ -17,11 +17,17 @@ class Bot(commands.Bot):
         
         # with open('../auth.txt') as f:
         #     token = f.readline().rstrip()
-        self.token = ''
-        self.refresh_token = ''
-        with open('../channel.txt') as f:
-            channel = f.readline().rstrip()
-        self.channel = channel
+        import json
+        # Opening JSON file
+        with open('config.json') as f:
+            self.config = json.load(f)
+        
+        self.token = self.config['token']
+        self.refresh_token = self.config['refreshToken']
+        #with open('../channel.txt') as f:
+        #    channel = f.readline().rstrip()
+        #self.channel = channel
+        channel = self.config['channel']
         super().__init__(token=self.token, prefix='!', initial_channels=[channel])
 
     # async def auth(self, token, refresh_token):
@@ -41,7 +47,7 @@ class Bot(commands.Bot):
 
     @commands.command()
     async def tot(self, ctx: commands.Context):
-        twitch = await Twitch()
+        twitch = await Twitch(self.config['clientID'], self.config['secret'])
 
         target_scope = [AuthScope.BITS_READ]
         auth = UserAuthenticator(twitch, target_scope, force_verify=False)
