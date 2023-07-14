@@ -31,7 +31,7 @@ class Bot(commands.Bot):
         super().__init__(token=self.token, prefix='!', initial_channels=[channel])
 
     # async def auth(self, token, refresh_token):
-    #     twitch = await Twitch('8k1ait256yqr6e6l9rv5e5giigfyiw', 'c1yulaw84hfsy0baa65t49e65l19az')
+
 
     #     target_scope = [AuthScope.BITS_READ]
     #     auth = UserAuthenticator(twitch, target_scope, force_verify=False)
